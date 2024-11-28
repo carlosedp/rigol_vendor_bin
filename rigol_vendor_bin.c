@@ -118,18 +118,18 @@ decode_vendor( u8 *d, u32 flen )
     if( !sw.gen_lic_files )
     {
       printf( DELIM );
-      printf( "%04X  EntrySize: %d\n", off + OFF( esize ), e.esize );
-      printf( "%04X  Type: %d (%s)\n", off + OFF( type ), e.type,
+      printf( "%04lX  EntrySize: %lu\n", off + OFF( esize ), (unsigned long)e.esize );
+      printf( "%04lX  Type: %d (%s)\n", off + OFF( type ), e.type,
           type_str[e.type] );
-      printf( "%04X  FieldSize: %d\n", off + OFF( fsize ), e.fsize );
-      printf( "%04X  CRC32: %08X", off + OFF( crc ), e.crc );
+      printf( "%04lX  FieldSize: %d\n", off + OFF( fsize ), e.fsize );
+      printf( "%04lX  CRC32: %08X", off + OFF( crc ), e.crc );
     }
     crc = crc32( d + off + OFF( strlen ), e.fsize - 2 * sizeof( u32 ) );
     if( !sw.gen_lic_files )
     {
       printf( " (%s)\n", crc == e.crc ? "OK" : "Fail" );
-      printf( "%04X  DataSize: %d\n", off + OFF( dsize ), e.dsize );
-      printf( "%04X  StringLen: %d\n", off + OFF( strlen ), e.strlen );
+      printf( "%04lX  DataSize: %d\n", off + OFF( dsize ), e.dsize );
+      printf( "%04lX  StringLen: %d\n", off + OFF( strlen ), e.strlen );
     }
     data = malloc( e.dsize );
     memcpy( data, d + off + sizeof( struct entry ), e.dsize );
@@ -137,7 +137,7 @@ decode_vendor( u8 *d, u32 flen )
     free( data );
     dbuf[e.strlen] = 0;
     if( !sw.gen_lic_files )
-      printf( "%04X  String: %s\n", off + sizeof( struct entry ), dbuf );
+      printf( "%04lX  String: %s\n", off + sizeof( struct entry ), dbuf );
     switch ( e.type )
     {
       case 5:
@@ -436,7 +436,7 @@ generate_single_option( char *family, char *model, char *opt, int new )
   len = new ? 56 : 48;
   for( i = 0; i < len; i++ )
   {
-    // u8 to lsb hex 
+    // u8 to lsb hex
     nib = xxx[i] & 0xf;
     nib += '0';
     if( nib > '9' )
@@ -525,7 +525,7 @@ void
 usage( char *progname )
 {
   fprintf( stderr, "\n%s [options] [vendor_bin_file]\n", progname );
-  fprintf( stderr, 
+  fprintf( stderr,
       "\t-M #\tset scope model\n"
       "\t-n\trandom serial number\n"
       "\t-N #\tset serial number\n"
